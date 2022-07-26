@@ -10,6 +10,27 @@ Should you decide to use this software in a publication we would appreciate if t
 
 ## Python and R
 
+### Installation
+
+All functions are contained in one script that simply needs to be included.
+
+Required packages for Python:
+
+* pandas
+* numpy
+* scipy
+
+Required packages for R:
+
+* data.table
+* dplyr
+* tidyr
+* purrr
+* rsample
+* GenBinomApps
+
+### Usage
+
 In both implementations, the main function *CI_calculation* is called identically and calculates the lower, one-sided 95% confidence intervals on the agreement rates as stipulated by the FDA using the Clopper-Pearson, clustered continuity-corrected Wilson and bias-corrected and accelerated bootstrap methods. 
 
 ```
@@ -31,3 +52,6 @@ CI_calculation(df,save_path,filename="CI_results",
 **Returns**:
 
 A csv table with agreement rates (+/- 15 mg/dl or % (AR15), +/- 20 % (AR20), +/- 40 mg/dl or % (AR40)) and their lower, one-sided 95% confidence intervals as calculated by the three approaches.
+
+
+An example of how to use the function is provided in the file *Example.py*/*Example.R*.
