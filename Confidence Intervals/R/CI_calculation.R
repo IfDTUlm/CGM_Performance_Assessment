@@ -6,7 +6,7 @@
 # For documentation see
 # https://github.com/IfDTUlm/CGM_Performance_Assessment
 # 
-# Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
+# Created by: Institut fï¿½r Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universitï¿½t Ulm
 # Contact XX@idt-ulm.de
 # 
 # This is a free software and comes with ABSOLUTELY NO WARRANTY

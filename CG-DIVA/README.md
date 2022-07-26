@@ -32,6 +32,8 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 
 **save_path**: Path for saving figure and results tables
 
+**filename** *(optional)*: Filename of the output files *(default: CG_DIVA)*
+
 **N_BS** *(optional)*: Number of bootstrap samples for calculating the deviation intervals. For a reliable estimation of deviation intervals we recommend to use at least 10 000 bootstrap samples. However for testing purposes the sample size can be reduced to reduce computation time. *(default 10 000)*
 
 **seed** *(optional)*: Seed for the random number generator used in the bootstrapping process. Provide [] if a the seed shall be automatically generated. Caution: Automatic seed generation can lead to slightly different results with each function call. To ensure reproducability provide a fixed seed *(default 1)*
