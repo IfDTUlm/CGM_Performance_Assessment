@@ -1,8 +1,11 @@
 # CG-DIVA v1.0
-Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA) as described in the following article (pdf in the Folder CG_DIVA)
+Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA) as described in the following article (see pdf in the folder)
 
 XXX
 
+Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
+
+---
 
 ## Python
 ### Installation
@@ -59,4 +62,3 @@ An example of how to use the function is provided in the file *Example.py*.
 
 code to come ...
 
-# Calculation of Confidence Intervals on Agreement Rates
