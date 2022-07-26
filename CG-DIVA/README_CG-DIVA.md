@@ -1,10 +1,3 @@
-# CGM Performance Assessment
-A collection of software packages for the statistical performance assessment of continous glucose monitoring systems.
-
-The software is provided by **Institut für Diabetes-Technologie, Forschungs- und Entwicklungsgesellschaft mbH an der Universität Ulm** and comes with ABSOLUTELY NO WARRANTY.
-
-For inquiries, support, feedback or feature requests please contact m.eichenlaub@idt-ulm.de or open an issue.
-
 # CG-DIVA v1.0
 Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA) as described in the following article (pdf in the Folder CG_DIVA)
 
