@@ -1,5 +1,5 @@
 # CGM Performance Assessment
-A collection of software packages for the statistical performance assessment of continous glucose monitoring systems. The software is provided by **Institut für Diabetes-Technologie, Forschungs- und Entwicklungsgesellschaft mbH an der Universität Ulm** and comes with ABSOLUTELY NO WARRANTY.
+A collection of software packages for the statistical performance assessment of continous glucose monitoring systems. The software is provided by the [**Institut für Diabetes-Technologie, Forschungs- und Entwicklungsgesellschaft mbH an der Universität Ulm**](www.idt-ulm.de) with support form the [**Diabetes Center Berne**](www.dcberne.com). The software is distributed under an MIT license and comes with ABSOLUTELY NO WARRANTY.
 
 Currently, the following software tools in *Python* and *R* are available:
 
