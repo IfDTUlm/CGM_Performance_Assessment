@@ -1,17 +1,15 @@
 """
 Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA)
-based on 
-
-XXReferenceXX
 
 For documentaiton see
 https://github.com/IfDTUlm/CGM_Performance_Assessment
 
 Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
-Contact XX@idt-ulm.de
+Contact m.eichenlaub@idt-ulm.de
 
 This is a free software and comes with ABSOLUTELY NO WARRANTY
 """
+
 import numpy as np
 import pandas as pd
 import os

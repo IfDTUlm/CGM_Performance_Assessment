@@ -2,7 +2,7 @@
 
 Calculation of confidence intervals on agreement rates for the assessment of compliance with FDA iCGM criteria as described in 
 
-XXReferenceXX
+Stephan, P.; Eichenlaub, M.; Waldenmaier, D.; Pleus, S.; Rothenbühler, M.; Haug, C.; Freckmann, G.: *A statistical approach for assessing the compliance of integrated continuous glucose monitoring systems with FDA accuracy requirements*, sumbitted to Diabetes Technology & Therapeutics 
 
 Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
 
@@ -51,7 +51,7 @@ CI_calculation(df,save_path,filename="CI_results",
 
 **Returns**:
 
-A csv table with agreement rates (+/- 15 mg/dl or % (AR15), +/- 20 % (AR20), +/- 40 mg/dl or % (AR40)) and their lower, one-sided 95% confidence intervals as calculated by the three approaches.
+A csv table with agreement rates (+/- 15 mg/dl or % (AR15), +/- 20 % (AR20), +/- 40 mg/dl or % (AR40)) in each glucose range (<70, 70-180, <180 and total) and their lower, one-sided 95% confidence intervals as calculated by the three approaches Clopper-Pearson (CP), clustered continuity-corrected Wilson (WCC) and bias-corrected and accelerated bootstrapping (BCa).
 
 
-An example of how to use the function is provided in the file *Example.py*/*Example.R*.
+An example of how to use the function and their ouptut is provided in the files *Example.py*/*Example.R*.

@@ -1,14 +1,11 @@
 """
 Calculation of confidence intervals on agreement rates for the assessment of compliance with FDA iCGM criteria
-based on
-
-XXReferenceXX
 
 For documentation see
 https://github.com/IfDTUlm/CGM_Performance_Assessment
 
 Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
-Contact XX@idt-ulm.de
+Contact: m.eichenlaub@idt-ulm.de
 
 This is a free software and comes with ABSOLUTELY NO WARRANTY
 """
