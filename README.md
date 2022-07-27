@@ -8,5 +8,4 @@ Currently, the following software tools in *Python* and *R* are available:
 
 Detailed information can be found in the README files of the respective folders
 
-For inquiries, support, feedback or feature requests please contact m.eichenlaub@idt-ulm.de or open an issue.
-
+For inquiries, support, feedback or feature requests please contact cgm_performance@idt-ulm.de or open an issue in this repository.
