@@ -398,14 +398,14 @@ def CG_DIVA(df,save_path,filename="CG-DIVA",
 
     # Assign Ranges according to BG
     # Range 1: <70, 2: 70-180, 3: >180
-    df["Range"] = (df["Comp"]<70)*1 + ((df["Comp"]>=70) & (df["Comp"]<=180))*2 + (df["Comp"]>180)*3 + df["Comp"]*0
+    df["Range"] = (df["Comp"]<70)*1 + ((df["Comp"]>=70) & (df["Comp"]<=180))*2 + (df["Comp"]>180)*3 + df["Comp"]*0 + df["CGM"]*0
     # Diff: Absolute Difference for <70, Relative Difference for >=70
     df["Diff"] = (df["Comp"]<70)*df["AbsDiff"] + (df["Comp"]>=70)*df["RelDiff"]
 
     # Making a copy of all data and assigning Ranges 4 (Total) and Relative difference to Diff
     dfn = df.copy()
     # Range 4: Total
-    dfn["Range"] = np.ones(df.shape[0])*4
+    dfn["Range"] = np.ones(df.shape[0])*4 + df["Range"]*0
     # Diff: Relative difference
     dfn["Diff"] = df["RelDiff"]
     df = pd.concat([df,dfn])
