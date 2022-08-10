@@ -7,18 +7,30 @@ Should you decide to use this software in a publication we would appreciate if t
 
 ---
 
-## Python
-### Installation
-All functions are included in the script *CG_DIVA.py*. 
+## Python and R
 
-Required packages
+### Installation
+
+All functions are contained in one script that simply needs to be included.
+
+Required packages for Python:
+
 * pandas
-* numpy 
+* numpy
 * matplotlib
+
+Required packages for R:
+
+* data.table
+* dplyr
+* tidyr
+* purrr
+* rsample
+* pracma
 
 ### Usage
 
-The main function is *CG_DIVA* and has the following function call:
+In both implementations, the main function *CG_DIVA* is called identically and performs the CG-DIVA. 
 
 ```
 CG_DIVA(df,save_path,filename="CG-DIVA",
@@ -28,7 +40,7 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 ```
 **Parameters:**
 
-**df**: Pandas dataframe with columns *SensorID*, *Comp* and *CGM*. *SensorID* must contain a unique identifier (string or number) for each CGM sensor. *Comp* must contain the  comparator measurement in mg/dL. *CGM* must contain the results of paired CGM measurements in mg/dL. Cells of *Comp* and *CGM* can be empty or contain *int* or *float* numbers. For the calculation of deviation intervals a minimum of 100 data pairs are required in each glucose range (<70, 70-180 and >180 mg/dL) 
+**df:** Pandas DataFrame (Python) or Data.Frame (R) with columns *SensorID*, *Comp* and *CGM*. *SensorID* must contain a unique identifier (string or number) for each CGM sensor. *Comp* must contain the  comparator measurement in mg/dL. *CGM* must contain the results of paired CGM measurements in mg/dL. Empty cells are not permitted
 
 **save_path**: Path for saving figure and results tables
 
@@ -40,9 +52,9 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 
 **ylims** *(optional)*: Limits of y-axis (in mg/dL / %) in CG-DIVA figure *(default [-80,-80])*
 
-**s_max** *(optional)*: Maximum number of sensors to be plotted in the sensor-to-sensor variability plot. If the number of sensors exeeds s_max, an equally spaced selection of sensors based on the median deviation in the total range (including maximun and minimum) are displayed.
+**s_max** *(optional)*: Maximum number of sensors to be plotted in the sensor-to-sensor variability plot. If the number of sensors exeeds s_max, an equally spaced selection of sensors based on the median deviation in the total range (including maximun and minimum) are displayed *(default 25)*.
 
-**figsize** *(optional)*: [Width,Height] of saved figure in centimeters *(default [16.5,8.5])*
+**figsize** *(optional)*: [Width,Height] of saved figure in centimeters
 
 **save_fig** *(optional)*: True/False whether to save the figure in png file *(default: True)*
 
@@ -54,13 +66,15 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 
 Figure with the CG-DIVA plots as png file and a csv file containing the deviation intervals
 
-An example of how to use the function is provided in the file *Example.py*. 
+An example of how to use the function is provided in the files *Example*. 
 
-### Example Figure
+## Example Figures
 
-![](/CG-DIVA/Python/CG-DIVA_Test_Data.png)
+### Python
 
-## R
+![](/CG-DIVA/Python/CG-DIVA.png)
 
-code to come ...
+### R
+
+![](/CG-DIVA/R/CG-DIVA.png)
 
