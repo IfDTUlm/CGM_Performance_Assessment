@@ -1,11 +1,13 @@
+import sys
+sys.path.append("")     # Insert Path of CG_DIVA.py
 import CG_DIVA as CG_DIVA
 import pandas as pd
 
-# Read Test data
-df = pd.read_csv("CG-DIVA/Test_Data.csv")
+# Read data
+df = pd.read_csv("") # Insert Path to data file
 
 # Define save path
 save_path = "" 
 
 # Perform CG-DIVA
-CG_DIVA.CG_DIVA(df,save_path,filename="CG-DIVA_Test_Data")
+CG_DIVA.CG_DIVA(df,save_path)

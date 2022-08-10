@@ -1,9 +1,10 @@
 # Load Script
-# Please provide the correct paths
-source(".../CI_calculation.R")
+source("")    # Insert Path of CI_calculation.R
 
-# Please provide the correct paths
-df <- read.csv(".../Test_Data.csv")
+# Read data
+df <- read.csv("")
+
+# Define save path
 save_path <- ""
 
 # Call Function

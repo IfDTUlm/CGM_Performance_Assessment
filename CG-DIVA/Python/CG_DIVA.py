@@ -4,7 +4,7 @@ Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA)
 For documentaiton see
 https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
+Created by: Institut fuer Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universitaet Ulm
 Contact cgm_performance@idt-ulm.de
 
 This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -201,7 +201,7 @@ def plotting(df,RES,version,ylims,s_max,figsize):
             ylim=ylims,yticks=range(ylims[0],ylims[1]+1,20),
             xlabel="Comparator Glucose Range [mg/dL (mmol/L)]",
             ylabel="Deviation [mg/dL or %]")
-        ax.set_title("Deviation Intervals",pad=15)     
+        ax.set_title("Deviation Intervals",pad=15,fontweight="bold")     
         ax.grid(axis="y")
         ax2 = ax.twinx()
         ax2.set(ylim=np.array(ylims)/18)        
@@ -283,7 +283,7 @@ def plotting(df,RES,version,ylims,s_max,figsize):
         ax.set(xlim=[0.5,4.5],xticks=range(1,5),xticklabels=["<70\n(<3.9)","70-180\n(3.9-10.0)",">180\n(>10.0)","Total"],
             ylim=ylims,yticks=range(ylims[0],ylims[1]+1,20),facecolor="lightgrey",
             xlabel="Comparator Glucose Range [mg/dL (mmol/L)]")
-        ax.set_title("Sensor-to-Sensor Variability",pad=15)
+        ax.set_title("Sensor-to-Sensor Variability",pad=15,fontweight="bold")
         ax.grid(axis="y")
         ax2 = ax.twinx()
         ax2.set(ylim=np.array(ylims)/18,ylabel="Deviation [mmol/L]")
@@ -332,7 +332,7 @@ def plotting(df,RES,version,ylims,s_max,figsize):
                             marker='o',markersize=2,color='k',linewidth=0.75,capsize=1)
     
     # Plotting
-    plt.rc('font',size=8)
+    plt.rc('font',size=7.5)
     plt.rcParams.update({'font.sans-serif':'Arial'})
     
     print("Creating Figure ...")
@@ -414,7 +414,7 @@ def CG_DIVA(df,save_path,filename="CG-DIVA",
     for r in range(4):
         n_r = df[df["Range"] == r+1]["Range"].count()
         if n_r<100:
-            raise ValueError("Range "+str(r+1)+" CGM contains contains inssufficient number of datapoints (<100)")
+            raise ValueError("Range "+str(r+1)+" contains an insufficient number of datapoints (<100)")
 
     # Print dataset information
     print("Number of Datapoints:",int(df["Diff"].count()/2))
