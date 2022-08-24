@@ -4,7 +4,7 @@ Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA)
 For documentaiton see
 https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-Created by: Institut fuer Diabetes-Technologie Forschungs- und Entwichlungsgesellschaft mbH an der Universitaet Ulm
+Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
 Contact cgm_performance@idt-ulm.de
 
 This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -103,7 +103,7 @@ def boostrapping(df,N,seed,conf_level=0.95):
     if N<10000:
         print("WARNING: Bootstrapping with less than 10 000 samples is not recommended")
 
-    RES = pd.DataFrame(columns=["Range","TI_U2","TI_U1","Median","TI_L1","TI_L2","Info"])
+    RES = pd.DataFrame(columns=["Range","Median","DI1_Upper","DI1_Lower","DI1_Range","DI2_Upper","DI2_Lower","DI2_Range"])
     
     if seed:      # Seed is provided, if not reset
         np.random.seed(seed)       # For reproducibility
@@ -147,30 +147,63 @@ def boostrapping(df,N,seed,conf_level=0.95):
         print(f"\r|{bar}| {percent:.1f}%",end="\r")
     
     print()
+    
     ## Collect Results
     RES["Range"] = ["<70","70-180",">180","Total"]
-    RES.at[1,"Info"] = "N_BS: "+str(N)+" Seed: "+str(seed)
-    RES.at[2,"Info"] = "Conf_Level: "+str(conf_level)
 
     # Median
-    RES["Median"] = np.round((df.groupby("Range")["Diff"].median()).to_numpy(),2)
+    RES["Median"] = (df.groupby("Range")["Diff"].median()).to_numpy()
 
     # TI confidence intervals, AR lower confidence bound
     # Loop over Ranges
     for r in range(4):
         # TIs
         a = calc_acc(df[df["Range"]==r+1],qtl=[(1-Int_size1[r])/2,(1+Int_size1[r])/2,(1-Int_size2[r])/2,(1+Int_size2[r])/2])        
-        RES.at[r,"TI_L1"] = np.round(BCa(BS_TI[r,0,:],DI[r,0],a[0],(1-conf_level)/2),2)
-        RES.at[r,"TI_U1"] = np.round(BCa(BS_TI[r,1,:],DI[r,1],a[1],(1+conf_level)/2),2)
-        RES.at[r,"TI_L2"] = np.round(BCa(BS_TI[r,2,:],DI[r,2],a[2],(1-conf_level)/2),2)
-        RES.at[r,"TI_U2"] = np.round(BCa(BS_TI[r,3,:],DI[r,3],a[3],(1+conf_level)/2),2)
+        RES.at[r,"DI1_Lower"] = BCa(BS_TI[r,0,:],DI[r,0],a[0],(1-conf_level)/2)
+        RES.at[r,"DI1_Upper"] = BCa(BS_TI[r,1,:],DI[r,1],a[1],(1+conf_level)/2)
+        RES.at[r,"DI2_Lower"] = BCa(BS_TI[r,2,:],DI[r,2],a[2],(1-conf_level)/2)
+        RES.at[r,"DI2_Upper"] = BCa(BS_TI[r,3,:],DI[r,3],a[3],(1+conf_level)/2)
+        RES.at[r,"DI1_Range"] = RES.at[r,"DI1_Upper"] - RES.at[r,"DI1_Lower"]
+        RES.at[r,"DI2_Range"] = RES.at[r,"DI2_Upper"] - RES.at[r,"DI2_Lower"] 
 
     # Delete results for Total range
-    RES.at[3,"TI_L2"] = "-"
-    RES.at[3,"TI_U2"] = "-"    
+    RES.at[3,"DI2_Lower"] = "-"
+    RES.at[3,"DI2_Upper"] = "-"
+    RES.at[3,"DI2_Range"] = "-"
+
+    ## Sensor-to-sensor variability parameters
+    sens = df["SensorID"].unique()
+    ns = len(sens)
+
+    # Loop over Ranges
+    for r in range(4):
+        med = np.empty(ns)*np.NaN   # Medians
+        r90 = np.empty(ns)*np.NaN   # 90% ranges
+        # Loop over Sensors
+        for i,s in enumerate(sens):
+            # Get deviations of sensor in Range
+            dev = (df[(df["SensorID"]==s) & (df["Range"]==r+1)]["Diff"]).to_numpy()
+            if len(dev)>=3:         # Check if dev has 3 or more datapoints
+                med[i] = np.median(dev)
+                if len(dev)>=10:
+                    r90[i] = np.quantile(dev,0.95) - np.quantile(dev,0.05)
+                else:
+                    r90[i] = np.NaN
+            else:
+                med[i] = np.NaN
+                r90[i] = np.NaN
+            
+        RES.at[r,"BSV_Min_Max"] = "[{:.2f} - {:.2f}]".format(np.nanmin(med),np.nanmax(med))
+        RES.at[r,"BSV_Range"] = np.nanmax(med) - np.nanmin(med)
+        RES.at[r,"WSV_90%Range"] = np.nanmedian(r90)
+        
     
     # Print Timing    
     print("DONE","Processing Time: "+str(np.round(time.time()-start,2))+" seconds")
+
+    # Info
+    RES.at[1,"Info"] = "N_BS: "+str(N)+" Seed: "+str(seed)
+    RES.at[2,"Info"] = "Conf_Level: "+str(conf_level)
     
     return RES
 
@@ -240,25 +273,25 @@ def plotting(df,RES,version,ylims,s_max,figsize):
             pos = r+1   # Position on x-axis
 
             # Read Results from DataFrame
-            TI_L1, TI_U1 = RES.at[r,"TI_L1"], RES.at[r,"TI_U1"]
-            TI_L2, TI_U2 = RES.at[r,"TI_L2"], RES.at[r,"TI_U2"]
+            DI_L1, DI_U1 = RES.at[r,"DI1_Lower"], RES.at[r,"DI1_Upper"]
+            DI_L2, DI_U2 = RES.at[r,"DI2_Lower"], RES.at[r,"DI2_Upper"]
 
             if r<3:         # Only plot Deviation interval 2 for ranges 1-3
                 # Interval 2
                 # Box            
-                ax.add_patch(rect((pos-wdth/2,TI_L2),wdth,TI_U2-TI_L2,
+                ax.add_patch(rect((pos-wdth/2,DI_L2),wdth,DI_U2-DI_L2,
                     facecolor="grey",alpha=0.4,edgecolor='k',linewidth=blw,linestyle="-",zorder=3))
                 # Text above axis
                 ax.text(pos+0.21,ax.get_ylim()[1]+2,Int_size2[r],ha="center",color="dimgrey")
 
             # Interval 1 
             # Box       
-            ax.add_patch(rect((pos-wdth/2,TI_L1),wdth,TI_U1-TI_L1,
+            ax.add_patch(rect((pos-wdth/2,DI_L1),wdth,DI_U1-DI_L1,
                 facecolor="grey",alpha=0.8,edgecolor='k',linewidth=blw,linestyle="-",zorder=3))
 
             # Median
             Med = RES.at[r,"Median"]
-            ax.plot([pos-wdth/2,pos+wdth/2],[Med]*2,'k-',linewidth=blw,zorder=3)
+            ax.plot([pos-wdth/6,pos+wdth/6],[Med]*2,'k-',linewidth=blw,zorder=3)
 
             # Text above axis
             if r<3:
@@ -317,7 +350,7 @@ def plotting(df,RES,version,ylims,s_max,figsize):
                 # Get deviations of sensor in Range
                 dev = (df[(df["SensorID"]==s) & (df["Range"]==r+1)]["Diff"]).to_numpy()
 
-                if np.any(dev):         # Check if dev is empty
+                if len(dev)>=3:         # Check if dev has 3 or more entries
                     m = np.median(dev)
                     if len(dev)>=10:
                         err = [[m-np.quantile(dev,(1-dat_int)/2)],[np.quantile(dev,(1+dat_int)/2)-m]]

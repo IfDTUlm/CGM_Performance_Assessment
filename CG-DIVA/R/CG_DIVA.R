@@ -3,7 +3,7 @@
 # For documentation see
 # https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-# Created by: Institut fuer Diabetes-Technologie Forschungs- und Entwichlungsgesellschaft mbH an der Universitaet Ulm
+# Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
 # Contact: cgm_performance@idt-ulm.de
 
 # This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -74,10 +74,10 @@ plotting <- function(df,RES,version,ylims=c(-80,80),s_max=25,figsize=c(30,15))
   
   for (r in 1:4){
     
-    TI_L1 = RES[r,"TI_L1"]
-    TI_U1 = RES[r,"TI_U1"]
-    TI_L2 = RES[r,"TI_L2"]
-    TI_U2 = RES[r,"TI_U2"]
+    TI_L1 = RES[r,"DI1_Lower"]
+    TI_U1 = RES[r,"DI1_Upper"]
+    TI_L2 = RES[r,"DI2_Lower"]
+    TI_U2 = RES[r,"DI2_Upper"]
     
     if (r<=3) {
       # Interval 2
@@ -101,7 +101,7 @@ plotting <- function(df,RES,version,ylims=c(-80,80),s_max=25,figsize=c(30,15))
     
     # Median
     med = RES[r,"Median"]
-    rect(r-wdth/2,med,r+wdth/2,med,col="black",
+    rect(r-wdth/6,med,r+wdth/6,med,col="black",
          lwd=3.5)
     
   }
@@ -169,7 +169,7 @@ plotting <- function(df,RES,version,ylims=c(-80,80),s_max=25,figsize=c(30,15))
     for (i in 1:n_s){
       dev <- subset(tmp,SensorID == ds_med[i,"SensorID"])
       
-      if (nrow(dev)>0){
+      if (nrow(dev)>=3){
         m <- median(dev$Diff)
         if (nrow(dev)>=10){
           err_L = quantile(dev$Diff,probs=(1-dat_int)/2)
@@ -204,7 +204,7 @@ plotting <- function(df,RES,version,ylims=c(-80,80),s_max=25,figsize=c(30,15))
 
 # ---------------------------------------
 # Bootstrapping
-bootstrapping <- function(df,N_BS,seed,conf_level=0.95)
+bootstrapping <- function(df,N_BS,seed,conf_level=0.95,version="")
 {
   
   # Calculate Acceleration --------------------------------------------------
@@ -266,11 +266,13 @@ bootstrapping <- function(df,N_BS,seed,conf_level=0.95)
   
   # Boostrapping
   RES <- data.frame(Range=c("<70","70-180",">180","Total"),
-                    TI_U2=numeric(4),
-                    TI_U1=numeric(4),
                     Median=numeric(4),
-                    TI_L1=numeric(4),
-                    TI_L2=numeric(4))
+                    DI1_Upper=numeric(4),
+                    DI1_Lower=numeric(4),
+                    DI1_Range=numeric(4),
+                    DI2_Upper=numeric(4),
+                    DI2_Lower=numeric(4),
+                    DI2_Range=numeric(4))
   
   
   if (!(is.na(seed))){
@@ -317,10 +319,12 @@ bootstrapping <- function(df,N_BS,seed,conf_level=0.95)
     # Get acceleration
     a <- Calc_Acc(subset(df, Range == r),c((1-Int_size1[r])/2,(1+Int_size1[r])/2,(1-Int_size2[r])/2,(1+Int_size2[r])/2))
     
-    RES[r,"TI_L1"] = BCa(res$TI_L1,DI[r,1],a[1],(1-conf_level)/2)
-    RES[r,"TI_U1"] = BCa(res$TI_U1,DI[r,2],a[2],(1+conf_level)/2)
-    RES[r,"TI_L2"] = BCa(res$TI_L2,DI[r,3],a[3],(1-conf_level)/2)
-    RES[r,"TI_U2"] = BCa(res$TI_U2,DI[r,4],a[4],(1+conf_level)/2)
+    RES[r,"DI1_Lower"] = BCa(res$TI_L1,DI[r,1],a[1],(1-conf_level)/2)
+    RES[r,"DI1_Upper"] = BCa(res$TI_U1,DI[r,2],a[2],(1+conf_level)/2)
+    RES[r,"DI2_Lower"] = BCa(res$TI_L2,DI[r,3],a[3],(1-conf_level)/2)
+    RES[r,"DI2_Upper"] = BCa(res$TI_U2,DI[r,4],a[4],(1+conf_level)/2)
+    RES[r,"DI1_Range"] = RES[r,"DI1_Upper"] - RES[r,"DI1_Lower"]
+    RES[r,"DI2_Range"] = RES[r,"DI2_Upper"] - RES[r,"DI2_Lower"]
     
     # Print progress
     print(paste("Range",r,"DONE"))
@@ -329,14 +333,47 @@ bootstrapping <- function(df,N_BS,seed,conf_level=0.95)
   # Print Timing
   print(paste("Processing Time",round(difftime(Sys.time(),stime,units="secs"),2),"seconds"))
   
-  # Collect Results
-  RES[1,"Info"] = paste("N_BS:",N_BS,"Seed:",seed)
-  RES[2,"Info"] = paste("Conf_Level:",conf_level)
-  
   # Delete results for Total range
-  RES[4,"TI_L2"] = "-"
-  RES[4,"TI_U2"] = "-"  
-
+  RES[4,"DI2_Lower"] = "-"
+  RES[4,"DI2_Upper"] = "-"
+  RES[4,"DI2_Range"] = "-"
+  
+  # Sensor to sensor variability parameters
+  sens <- unique(df$SensorID)
+  n_s <- length(unique(df$SensorID))
+  
+  for (r in 1:4){
+    tmp <- subset(df,Range == r)
+    med = numeric(n_s)
+    r90 = numeric(n_s)
+    
+    for (i in 1:n_s){
+      dev <- subset(tmp,SensorID == sens[i])
+      
+      if (nrow(dev)>=3){
+        med[i] <- median(dev$Diff)
+        if (nrow(dev)>=10){
+          r90[i] = quantile(dev$Diff,probs=0.95) - quantile(dev$Diff,probs=0.05)
+        }
+        else {
+          r90[i] = NA
+        }
+      }
+      else{
+        med[i] = NA
+        r90[i] = NA
+      }
+    }
+    
+    RES[r,"BSV_Min_Max"] = paste("[",round(min(med,na.rm=TRUE),2)," - ",round(max(med,na.rm=TRUE),2),"]",sep="")
+    RES[r,"BSV_Range"] = max(med,na.rm=TRUE) - min(med,na.rm=TRUE)
+    RES[r,"WSV_90%Range"] = median(r90,na.rm=TRUE)
+  }
+  
+  # Info
+  RES[1,"Info"] = version
+  RES[2,"Info"] = paste("N_BS:",N_BS,"Seed:",seed)
+  RES[3,"Info"] = paste("Conf_Level:",conf_level)
   
   return (RES)
 }
@@ -399,7 +436,7 @@ CG_DIVA <- function(df,save_path,filename="CG-DIVA",
   }
     
   # bootstrapping
-  RES <- bootstrapping(df,N_BS=N_BS,seed=seed)
+  RES <- bootstrapping(df,N_BS=N_BS,seed=seed,version=version)
   if (save_res){
     write.csv(RES,paste(save_path,filename,".csv",sep=""),row.names=FALSE)
   }
