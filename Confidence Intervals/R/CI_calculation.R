@@ -3,7 +3,7 @@
 # For documentation see
 # https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-# Created by: Institut fuer Diabetes-Technologie Forschungs- und Entwichlungsgesellschaft mbH an der Universitaet Ulm
+# Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
 # Contact: cgm_performance@idt-ulm.de
 
 # This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -194,9 +194,15 @@ CI_Bootstrapping <- function (RES, df, alpha=0.05, N_BS=10000, seed=1)
     # Get acceleration
     a <- Calc_Acc(subset(df, Range == r))
     
-    RES[r,"BCa_CI15"] = BCa(res$AR15,RES[r,"AR15"],a[1],alpha=alpha)
-    RES[r,"BCa_CI20"] = BCa(res$AR20,RES[r,"AR20"],a[2],alpha=alpha)
-    RES[r,"BCa_CI40"] = BCa(res$AR40,RES[r,"AR40"],a[3],alpha=alpha)
+    # +/- 15
+    if ((RES[r,"AR15"] == 0) | (RES[r,"AR15"] == 100)){RES[r,"BCa_CI15"] <- RES[r,"CP_CI15"]}
+    else {RES[r,"BCa_CI15"] <- BCa(res$AR15,RES[r,"AR15"],a[1],alpha=alpha)}
+    # +/- 20
+    if ((RES[r,"AR20"] == 0) | (RES[r,"AR20"] == 100)){RES[r,"BCa_CI20"] <- RES[r,"CP_CI20"]}    
+    else {RES[r,"BCa_CI20"] <- BCa(res$AR20,RES[r,"AR20"],a[2],alpha=alpha)}
+    # +/- 40
+    if ((RES[r,"AR40"] == 0) | (RES[r,"AR40"] == 100)){RES[r,"BCa_CI40"] <- RES[r,"CP_CI40"]}
+    else {RES[r,"BCa_CI40"] <- BCa(res$AR40,RES[r,"AR40"],a[3],alpha=alpha)}
     
     # Print progress
     print(paste("Range",r,"DONE"))
@@ -206,10 +212,10 @@ CI_Bootstrapping <- function (RES, df, alpha=0.05, N_BS=10000, seed=1)
   print(paste("Processing Time",round(difftime(Sys.time(),stime,units="secs"),2),"seconds"))
   
   # Collect Results
-  RES[1,"Info"] = paste("Seed:",seed)
-  RES[2,"Info"] = paste("N_BS:",N_BS)
-  RES[3,"Info"] = paste("Conf_Level:",alpha)
-  RES[4,"Info"] = paste("Software:",version[["version.string"]])
+  RES[1,"Info"] <- paste("Seed:",seed)
+  RES[2,"Info"] <- paste("N_BS:",N_BS)
+  RES[3,"Info"] <- paste("Conf_Level:",alpha)
+  RES[4,"Info"] <- paste("Software:",version[["version.string"]])
   
   
   return (RES)
@@ -294,5 +300,5 @@ CI_Calculation <- function (df, save_path, filename="CI_Results",N_BS=10000, see
   # Save Results 
   write.csv(RES,paste(save_path,filename,".csv",sep=""),row.names=FALSE)
   
-  return (RES)
+  return ()
 }

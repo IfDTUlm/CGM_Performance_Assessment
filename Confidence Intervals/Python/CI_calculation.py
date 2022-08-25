@@ -4,7 +4,7 @@ Calculation of confidence intervals on agreement rates for the assessment of com
 For documentation see
 https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-Created by: Institut für Diabetes-Technologie Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
+Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
 Contact: cgm_performance@idt-ulm.de
 
 This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -27,11 +27,20 @@ def CI_Clopper_Pearson(RES, df, alpha=0.05):
 
     # Loop over ranges
     for r in range(4):
-        RES.at[r,"CP_CI15"] = sts.beta.ppf(alpha,n_k.at[r,"WI15"],
+        if n_k.at[r,"WI15"] == 0:
+            RES.at[r,"CP_CI15"] = 0
+        else:
+            RES.at[r,"CP_CI15"] = sts.beta.ppf(alpha,n_k.at[r,"WI15"],
                                     n_k.at[r,"n"]-n_k.at[r,"WI15"]+1)*100
-        RES.at[r,"CP_CI20"] = sts.beta.ppf(alpha,n_k.at[r,"WI20"],
+        if n_k.at[r,"WI20"] == 0:
+            RES.at[r,"CP_CI20"] = 0
+        else:
+            RES.at[r,"CP_CI20"] = sts.beta.ppf(alpha,n_k.at[r,"WI20"],
                                     n_k.at[r,"n"]-n_k.at[r,"WI20"]+1)*100
-        RES.at[r,"CP_CI40"] = sts.beta.ppf(alpha,n_k.at[r,"WI40"],
+        if n_k.at[r,"WI40"] == 0:
+            RES.at[r,"CP_CI40"] = 0
+        else:
+            RES.at[r,"CP_CI40"] = sts.beta.ppf(alpha,n_k.at[r,"WI40"],
                                     n_k.at[r,"n"]-n_k.at[r,"WI40"]+1)*100
 
     return RES
@@ -128,6 +137,8 @@ def CI_Bootstrapping(RES, df, alpha=0.05, N_BS=10000, seed=1):
         
         # Remove mean
         uu = np.add(np.mean(u,axis=0),-u)
+        # Replace 0 with nan
+        uu[uu == 0] = np.NaN
         # Estimate acceleration
         a = np.sum(uu**3,axis=0) / (6*(np.sum(uu**2,axis=0)**(3/2)))
         
@@ -150,7 +161,7 @@ def CI_Bootstrapping(RES, df, alpha=0.05, N_BS=10000, seed=1):
         res:    Calculated quantile
         
         """
-        
+
         # BCa method
         sims = len(dat)
         z_inv = np.sum((dat < theta_h)*1)/sims
@@ -162,7 +173,7 @@ def CI_Bootstrapping(RES, df, alpha=0.05, N_BS=10000, seed=1):
 
         return res
 
-    import time, sys
+    import time
 
     ## Bootstrapping
     if seed:      # Seed is provided, if not reset
@@ -205,13 +216,25 @@ def CI_Bootstrapping(RES, df, alpha=0.05, N_BS=10000, seed=1):
 
     ## Collect Results
     # AR lower confidence bound
-    # Loop over bins
+    # Loop over ranges
     for r in range(4):
         # ARs
         a = calc_acc(df[df["Range"]==r+1])
-        RES.at[r,"BCa_CI15"] = BCa(BS_AR[r,0,:],RES.at[r,"AR15"],a[0],alpha=alpha)
-        RES.at[r,"BCa_CI20"] = BCa(BS_AR[r,1,:],RES.at[r,"AR20"],a[1],alpha=alpha)
-        RES.at[r,"BCa_CI40"] = BCa(BS_AR[r,2,:],RES.at[r,"AR40"],a[2],alpha=alpha)
+        # +/- 15
+        if (RES.at[r,"AR15"] == 0) | (RES.at[r,"AR15"] == 100):
+            RES.at[r,"BCa_CI15"] = RES.at[r,"CP_CI15"]
+        else:
+            RES.at[r,"BCa_CI15"] = BCa(BS_AR[r,0,:],RES.at[r,"AR15"],a[0],alpha=alpha)
+        # +/- 20
+        if (RES.at[r,"AR20"] == 0) | (RES.at[r,"AR20"] == 100):
+            RES.at[r,"BCa_CI20"] = RES.at[r,"CP_CI20"]
+        else:    
+            RES.at[r,"BCa_CI20"] = BCa(BS_AR[r,1,:],RES.at[r,"AR20"],a[1],alpha=alpha)
+        # +/- 40
+        if (RES.at[r,"AR40"] == 0) | (RES.at[r,"AR40"] == 100):
+            RES.at[r,"BCa_CI40"] = RES.at[r,"CP_CI40"]
+        else:
+            RES.at[r,"BCa_CI40"] = BCa(BS_AR[r,2,:],RES.at[r,"AR40"],a[2],alpha=alpha)
 
     # Print Timing    
     print("Processing Time: "+str(np.round(time.time()-start,2))+" seconds")
