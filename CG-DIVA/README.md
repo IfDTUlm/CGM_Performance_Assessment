@@ -52,7 +52,7 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 
 **ylims** *(optional)*: Limits of y-axis (in mg/dL / %) in CG-DIVA figure *(default [-80,-80])*
 
-**s_max** *(optional)*: Maximum number of sensors to be plotted in the sensor-to-sensor variability plot. If the number of sensors exeeds s_max, an equally spaced selection of sensors based on the median deviation in the total range (including maximun and minimum) are displayed *(default 25)*.
+**s_max** *(optional)*: Maximum number of sensors to be plotted in the sensor-to-sensor variability plot. If the number of sensors exeeds s_max, an equally spaced selection of sensors based on the median deviation in the total range (including maximum and minimum) are displayed *(default 25)*.
 
 **figsize** *(optional)*: [Width,Height] of saved figure in centimeters
 

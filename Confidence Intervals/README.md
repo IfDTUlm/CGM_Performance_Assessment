@@ -54,4 +54,4 @@ CI_calculation(df,save_path,filename="CI_results",
 A csv table with agreement rates (+/- 15 mg/dl or % (AR15), +/- 20 % (AR20), +/- 40 mg/dl or % (AR40)) in each glucose range (<70, 70-180, <180 and total) and their lower, one-sided 95% confidence intervals as calculated by the three approaches Clopper-Pearson (CP), clustered continuity-corrected Wilson (WCC) and bias-corrected and accelerated bootstrapping (BCa).
 
 
-An example of how to use the function and their ouptut is provided in the files *Example.py*/*Example.R*.
+An example of how to use the function and their output is provided in the files *Example.py*/*Example.R*.
