@@ -3,7 +3,7 @@
 # For documentation see
 # https://github.com/IfDTUlm/CGM_Performance_Assessment
 
-# Created by: Institut für Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universität Ulm
+# Created by: Institut fï¿½r Diabetes-Technology Forschungs- und Entwichlungsgesellschaft mbH an der Universitï¿½t Ulm
 # Contact: cgm_performance@idt-ulm.de
 
 # This is a free software and comes with ABSOLUTELY NO WARRANTY
@@ -244,7 +244,7 @@ bootstrapping <- function(df,N_BS,seed,conf_level=0.95,version="")
     # In case of failure of the BCa method, the percentile method is used
     
     # Check if BCa can be applied
-    if ((min(dat) >= theta_h) | (max(dat) <= theta_h)){
+    if ((min(dat) >= theta_h) | (max(dat) <= theta_h) | is.infinite(a)){
       # Switch to percentile method
       res = quantile(dat,probs=qtl)
       warning("BCa method could not be applied, using percentile method instead")

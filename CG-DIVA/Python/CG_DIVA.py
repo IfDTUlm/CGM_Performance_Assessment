@@ -41,9 +41,10 @@ def boostrapping(df,N,seed,conf_level=0.95):
         dat = dat[~np.isnan(dat)]
 
         # Check if BCa can be applied
-        if (np.min(dat) >= theta_h) or (np.max(dat) <= theta_h):
+        if (np.min(dat) >= theta_h) or (np.max(dat) <= theta_h) or (np.isnan(a)):
             # Switch to percentile method
             res = np.quantile(dat,qtl)
+            print("BCa method could not be applied, using percentile method instead")
             return res
 
         # BCa method
