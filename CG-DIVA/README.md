@@ -1,7 +1,7 @@
 # CG-DIVA v1.0
 Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA) as described in the following article
 
-Eichenlaub, M.; Stephan, P.; Waldenmaier, D.; Pleus, S.; Rothenbühler, M.; Haug, C.; Hinzmann, R.; Thomas, A.; Jendle, J.; Diem, P.; Freckmann, G.: *Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA): A Novel Approach for the Statistical Accuracy Assessment of Continuous Glucose Monitoring Systems*, TBD 
+Eichenlaub M, Stephan P, Waldenmaier D, Pleus S, Rothenbühler M, Haug C, Hinzmann R, Thomas A, Jendle J, Diem P, Freckmann G. Continuous Glucose Deviation Interval and Variability Analysis (CG-DIVA): A Novel Approach for the Statistical Accuracy Assessment of Continuous Glucose Monitoring Systems. J Diabetes Sci Technol. 2022 Nov 3:19322968221134639. doi: 10.1177/19322968221134639. Epub ahead of print. PMID: 36329636.
 
 Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
 
