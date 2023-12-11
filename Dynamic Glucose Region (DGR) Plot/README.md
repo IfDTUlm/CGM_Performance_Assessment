@@ -20,10 +20,8 @@ Required packages
 The main function is *DGR_plot* and has the following function call:
 
 ```
-CG_DIVA(df,save_path,filename="CG-DIVA",
-        N_BS=10000,seed=1,
-        ylims=[-80,80],s_max=25,figsize=[16.5,8.5],
-        save_fig=True,save_res=True,show_fig=True):
+DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
+             save_fig=False,show_fig=True,show_mmol=True,remove_dat=True):
 ```
 **Parameters:**
 
