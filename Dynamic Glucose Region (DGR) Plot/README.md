@@ -1,6 +1,6 @@
 Creation of a Dynamic Glucose Region (DGR) plot as described in the following article (see pdf in the folder)
 
-Eichenlaub, M.; Pleus, S.; Rothenbühler, M.; [...] Freckmann, G.: *Comparator Data Characteristics and Testing Procedures for the Clinical Performance Evaluation of Continuous Glucose Monitoring Systems*, submitted to Diabetes Technology & Therapeutics
+Eichenlaub, M.; Pleus, S.; Rothenbühler, M.; [...] Freckmann, G.: *Comparator Data Characteristics and Testing Procedures for the Clinical Performance Evaluation of Continuous Glucose Monitoring Systems*, Diabetes Technology & Therapeutics
 
 Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
 
@@ -27,27 +27,23 @@ CG_DIVA(df,save_path,filename="CG-DIVA",
 ```
 **Parameters:**
 
-**df**: Pandas dataframe with columns *SensorID*, *Comp* and *CGM*. *SensorID* must contain a unique identifier (string or number) for each CGM sensor. *Comp* must contain the  comparator measurement in mg/dL. *CGM* must contain the results of paired CGM measurements in mg/dL. Cells of *Comp* and *CGM* can be empty or contain *int* or *float* numbers. For the calculation of deviation intervals a minimum of 100 data pairs are required in each glucose range (<70, 70-180 and >180 mg/dL)
+**df**: Pandas dataframe with columns *BG* and *ROC*, containing the RoC-BG pairs
 
-**save_path**: Path for saving figure and results tables
+**save_path** *(optional)*: Path for saving the figure
 
-**filename** *(optional)*: Filename of the output files *(default: CG_DIVA)*
+**filename** *(optional)*: Filename of the output files *(default: DGR_plot)*
 
-**N_BS** *(optional)*: Number of bootstrap samples for calculating the deviation intervals. For a reliable estimation of deviation intervals we recommend to use at least 10 000 bootstrap samples. However for testing purposes the sample size can be reduced to reduce computation time. *(default 10 000)*
+**figsize** *(optional)*: [Width,Height] of saved figure in centimeters *(default [13,10])*
 
-**seed** *(optional)*: Seed for the random number generator used in the bootstrapping process. Provide [] if a the seed shall be automatically generated. Caution: Automatic seed generation can lead to slightly different results with each function call. To ensure reproducability provide a fixed seed *(default 1)*
-
-**ylims** *(optional)*: Limits of y-axis (in mg/dL / %) in CG-DIVA figure *(default [-80,-80])*
-
-**s_max** *(optional)*: Maximum number of sensors to be plotted in the sensor-to-sensor variability plot. If the number of sensors exeeds s_max, an equally spaced selection of sensors based on the median deviation in the total range (including maximun and minimum) are displayed.
-
-**figsize** *(optional)*: [Width,Height] of saved figure in centimeters *(default [16.5,8.5])*
+**ax** *(optional)*: Handle to existing axis object
 
 **save_fig** *(optional)*: True/False whether to save the figure in png file *(default: True)*
 
-**save_res** *(optional)*: True/False whether to save the results of the deviation intervals in csv file *(default: True)*
-
 **show_fig** *(optional)*: True/False whether to display the figure *(default: True)*
+
+**show_mmol** *(optional)*: True/False whether to include axes in mmol/L or mmol/L/min *(default: True)*
+
+**remove_dat** *(optional)*: whether to remove data to fulfill the requirements *(default: True)*
 
 **Returns:**
 
@@ -57,9 +53,9 @@ An example of how to use the function is provided in the file *Example.py*.
 
 ### Example Figure
 
-![](/CG-DIVA/Python/CG-DIVA_Test_Data.png)
+![](/Dynamic Glucose Region (DGR) Plot/Python/DGR_plot.png)
 
 ## R
 
-code to come ...
+available upon request
 

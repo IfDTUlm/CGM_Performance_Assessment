@@ -131,7 +131,7 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
     figsize:        [Width,Height] of figure in cm
     ax:             Handle to existing axis object
     save_fig:       True/False whether to save the figure
-    show_plot:      True/False whether to show the figure
+    show_fig:      True/False whether to show the figure
     show_mmol:      True/False whether to inlcude axes in mmol/L or mmol/L/min
     remove_dat:     True/False whether to remove data to fullfill the requirements
 
