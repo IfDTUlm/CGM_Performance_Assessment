@@ -1,6 +1,6 @@
 Creation of a Dynamic Glucose Region (DGR) plot as described in the following article (see pdf in the folder)
 
-Eichenlaub, M.; Pleus, S.; Rothenbühler, M.; [...] Freckmann, G.: *Comparator Data Characteristics and Testing Procedures for the Clinical Performance Evaluation of Continuous Glucose Monitoring Systems*, Diabetes Technology & Therapeutics
+Eichenlaub, M.; Pleus, S.; Rothenbühler, M.; [...] Freckmann, G.: *Comparator Data Characteristics and Testing Procedures for the Clinical Performance Evaluation of Continuous Glucose Monitoring Systems*, Diabetes Technology & Therapeutics, 2024 [Link](https://www.liebertpub.com/doi/10.1089/dia.2023.0465)
 
 Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
 

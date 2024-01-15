@@ -2,7 +2,7 @@
 
 Calculation of confidence intervals on agreement rates for the assessment of compliance with FDA iCGM criteria as described in 
 
-Stephan P, Eichenlaub M, Waldenmaier D, Pleus S, Rothenbühler M, Haug C, Freckmann G. A statistical approach for assessing the compliance of integrated continuous glucose monitoring systems with FDA accuracy requirements. Diabetes Technol Ther. 2022 Oct 28. doi: 10.1089/dia.2022.0331. Epub ahead of print. PMID: 36306521.
+Stephan P, Eichenlaub M, Waldenmaier D, Pleus S, Rothenbühler M, Haug C, Freckmann G. A statistical approach for assessing the compliance of integrated continuous glucose monitoring systems with FDA accuracy requirements. Diabetes Technol Ther. 2022 Oct 28. doi: 10.1089/dia.2022.0331. Epub ahead of print. PMID: 36306521. [Link](https://www.liebertpub.com/doi/10.1089/dia.2022.0331)
 
 Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
 
