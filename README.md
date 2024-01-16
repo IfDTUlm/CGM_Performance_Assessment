@@ -3,10 +3,16 @@ A collection of software packages for the statistical performance assessment of 
 
 Currently, the following software tools in *Python* and *R* (some of them) are available:
 
-* Continuous Glucose Deviation and Interval Analysis (CG-DIVA)
 * Calculation of confidence intervals on agreement rates for the assessment of compliance with FDA iCGM criteria
+
+* Continuous Glucose Deviation and Interval Analysis (CG-DIVA)
+![](/CG-DIVA/Python/CG-DIVA.png)
+
 * Creation of a Dynamic Glucose Region Plot to show and assess the characteristics of comparator data collected during CGM performance studies
+![](</Dynamic Glucose Region (DGR) Plot/Python/DGR_plot.png>)
+
 * Clinical Trend Concurrence Analysis
+![](</Clinical Trend Concurrence Analysis/Python/CTCA.png>)
 
 Detailed information can be found in the README files of the respective folders
 

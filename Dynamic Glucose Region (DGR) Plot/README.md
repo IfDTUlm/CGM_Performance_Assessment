@@ -51,7 +51,7 @@ An example of how to use the function is provided in the file *Example.py*.
 
 ### Example Figure
 
-![](/Dynamic Glucose Region (DGR) Plot/Python/DGR_plot.png)
+![](</Dynamic Glucose Region (DGR) Plot/Python/DGR_plot.png>)
 
 ## R
 
