@@ -48,7 +48,7 @@ An example of how to use the function is provided in the file *Example.py*.
 
 ### Example Figure
 
-![](/Clinical Trend Concurrence Analysis/Python/CTCA.png)
+![](</Clinical Trend Concurrence Analysis/Python/CTCA.png>)
 
 ## R
 
