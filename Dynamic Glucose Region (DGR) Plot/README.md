@@ -7,7 +7,7 @@ Pleus, S.; Eichenlaub, M.; [...] Freckmann, G.: *Clinical assessment and accepta
 Should you decide to use this software in a publication we would appreciate if the above references would be cited.
 
 ## Update 2026
-The function now inlcudes the updated definitions of the DGR are proposed by the IFCC WG-CGM guideline published in 2025
+The function now inlcudes the updated definitions of the DGRs as proposed by the IFCC WG-CGM guideline published in 2025
 
 ---
 
