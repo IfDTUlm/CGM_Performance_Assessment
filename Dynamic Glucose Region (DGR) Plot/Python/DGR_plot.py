@@ -15,7 +15,7 @@ import os
 
 # Define the parameters of the DGR plot
 BGLow, BGHigh = 70, 300                     # Lower and upper BG limits
-AlertLowBG, AlertHighBG = 70, 250           # Lower and upper BG limts for alert regions
+AlertLowBG, AlertHighBG = 80, 200           # Lower and upper BG limts for alert regions (adapted based on 2025 article in CCA)
 AlertLowROC, AlertHighROC = -1, 1.5         # Lower and upper ROC limts for alert regions
 pred_h = 30                                 # Prediction horizon for alert regions
 ROC_lim = [-5,5]                            # Limits of ROC axis
