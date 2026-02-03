@@ -15,7 +15,7 @@ import os
 
 # Define the parameters of the DGR plot
 BGLow, BGHigh = 70, 300                     # Lower and upper BG limits
-AlertLowBG, AlertHighBG = 80, 200           # Lower and upper BG limts for alert regions (adapted based on 2025 article in CCA)
+AlertLowBG, AlertHighBG = 80, 200           # Lower and upper BG limts for alert regions
 AlertLowROC, AlertHighROC = -1, 1.5         # Lower and upper ROC limts for alert regions
 pred_h = 30                                 # Prediction horizon for alert regions
 ROC_lim = [-5,5]                            # Limits of ROC axis
@@ -40,7 +40,7 @@ def region_cnt(df):
 
     """
 
-    cnt = [0]*4
+    cnt = [0]*6
     n = df["BG"].count()
 
     # Predicted BG 30 min into the future
@@ -54,10 +54,10 @@ def region_cnt(df):
     cnt[2] = (((df["BG"] >= BGLow) & (df["BGP"] < AlertLowBG) & (df["ROC"] < AlertLowROC))*1).sum()
     # Alert high
     cnt[3] = (((df["BG"] <= BGHigh) & (df["BGP"] > AlertHighBG) & (df["ROC"] > AlertHighROC))*1).sum()
-    # Neutral
-    cnt.append(n-sum(cnt))
+    # Stable
+    cnt[4] = (((df["BG"] <= 180) & (df["BG"] >= 70) & (df["ROC"] >= -1) & (df["ROC"] <= 1))*1).sum()
     # Total
-    cnt.append(n)
+    cnt[5] = n
 
     return np.array(cnt)
 
@@ -112,7 +112,7 @@ def remove_data(df):
 
         else:
             # Insert NaNs for exluded pairs
-            df.iloc[:n_ex,:] = np.NaN
+            df.iloc[:n_ex,:] = np.nan
             # restore original sorting (I can't remember why)
             df = df.sort_index()
             msg = "{:d} ({:.1f}%) RoC-BG pairs excluded".format(n_ex,n_ex/cnt[5]*100)
@@ -131,7 +131,7 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
     figsize:        [Width,Height] of figure in cm
     ax:             Handle to existing axis object
     save_fig:       True/False whether to save the figure
-    show_fig:      True/False whether to show the figure
+    show_plot:      True/False whether to show the figure
     show_mmol:      True/False whether to inlcude axes in mmol/L or mmol/L/min
     remove_dat:     True/False whether to remove data to fullfill the requirements
 
@@ -188,21 +188,33 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
 
     # Boundaries
     zo = 4
+    border_lw=0.8
     col = "dimgrey"
-    lw = 0.8
-    # BG low
-    ax.plot(ROC_lim,[BGLow]*2,color=col,zorder=zo,linewidth=lw)
-    # BG high
-    ax.plot(ROC_lim,[BGHigh]*2,color=col,zorder=zo,linewidth=lw)
-    # Alert low
-    ax.plot([AlertLowROC,AlertLowROC,ROC_lim[0]],
-            [BGLow,AlertLowBG-AlertLowROC*pred_h,AlertLowBG-ROC_lim[0]*pred_h],color=col,zorder=zo,linewidth=lw)
-    # Alert high
-    ax.plot([AlertHighROC,AlertHighROC,ROC_lim[1]],
-            [BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h],color=col,zorder=zo,linewidth=lw)
 
-    ax.plot([ROC_lim[1]]*2,BG_lim,color=col,zorder=zo,linewidth=lw)
-    ax.plot([ROC_lim[1]+pad]*2,BG_lim,color=col,zorder=zo,linewidth=lw)
+    # BG low
+    ax.plot(ROC_lim,[BGLow]*2,color=col,zorder=zo,linewidth=border_lw)
+    # BG high
+    ax.plot(ROC_lim,[BGHigh]*2,color=col,zorder=zo,linewidth=border_lw)
+    # Alert low
+    if AlertLowBG-ROC_lim[0]*pred_h <= BGHigh:
+        ax.plot([AlertLowROC,AlertLowROC,ROC_lim[0]],
+                [BGLow,AlertLowBG-AlertLowROC*pred_h,AlertLowBG-ROC_lim[0]*pred_h],color=col,zorder=zo,linewidth=border_lw)
+    else:
+        ax.plot([AlertLowROC,AlertLowROC,-(BGHigh-AlertLowBG)/pred_h],
+                [BGLow,AlertLowBG-AlertLowROC*pred_h,BGHigh],color=col,zorder=zo,linewidth=border_lw)
+    # Alert high
+    if AlertHighBG-ROC_lim[1]*pred_h >= BGLow:
+        ax.plot([AlertHighROC,AlertHighROC,ROC_lim[1]],
+                [BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h],color=col,zorder=zo,linewidth=border_lw)
+    else:
+        ax.plot([AlertHighROC,AlertHighROC,-(BGLow-AlertHighBG)/pred_h],
+                [BGHigh,AlertHighBG-AlertHighROC*pred_h,BGLow],color=col,zorder=zo,linewidth=border_lw)
+    # Stable
+    ax.plot([-1,1,1,-1,-1],[70,70,180,180,70],color=col,zorder=zo,linewidth=border_lw)
+
+    # Borders between DGR and bars
+    ax.plot([ROC_lim[1]]*2,BG_lim,color=col,zorder=zo,linewidth=1)
+    ax.plot([ROC_lim[1]+pad]*2,BG_lim,color=col,zorder=zo,linewidth=1)
 
     # Region colors
     # BG high
@@ -213,17 +225,37 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
             [BG_lim[0],BG_lim[0],BGLow,BGLow],color="darkorange",alpha=0.4,zorder=2,edgecolor="None")
 
     # Alert Low
-    ax.fill([ROC_lim[0],AlertLowROC,AlertLowROC,ROC_lim[0]],
-            [BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,AlertLowBG-ROC_lim[0]*pred_h],
-            color="red",alpha=0.2,zorder=2,edgecolor="None")
+    if AlertLowBG-ROC_lim[0]*pred_h <= BGHigh:
+        ax.fill([ROC_lim[0],AlertLowROC,AlertLowROC,ROC_lim[0]],
+                [BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,AlertLowBG-ROC_lim[0]*pred_h],
+                color="red",alpha=0.2,zorder=2,edgecolor="None")
+    else:
+        ax.fill([ROC_lim[0],AlertLowROC,AlertLowROC,-(BGHigh-AlertLowBG)/pred_h,ROC_lim[0]],
+                [BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,BGHigh,BGHigh],
+                color="red",alpha=0.2,zorder=2,edgecolor="None")
+
     # Alert High
-    ax.fill([ROC_lim[1],AlertHighROC,AlertHighROC,ROC_lim[1]],
-            [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h],
-            color="red",alpha=0.2,zorder=2,edgecolor="None")
+    if AlertHighBG-ROC_lim[1]*pred_h >= BGLow:
+        ax.fill([ROC_lim[1],AlertHighROC,AlertHighROC,ROC_lim[1]],
+                [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h],
+                color="red",alpha=0.2,zorder=2,edgecolor="None")
+    else:
+        ax.fill([ROC_lim[1],AlertHighROC,AlertHighROC,-(BGLow-AlertHighBG)/pred_h,ROC_lim[1]],
+                [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,BGLow,BGLow],
+                color="red",alpha=0.2,zorder=2,edgecolor="None")
+
     # Neutral
-    ax.fill([(AlertLowBG-BGHigh)/pred_h,AlertHighROC,AlertHighROC,ROC_lim[1],ROC_lim[1],AlertLowROC,AlertLowROC,(AlertLowBG-BGHigh)/pred_h],
-            [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h,BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,BGHigh],
-            color="tab:green",alpha=0.3,zorder=2,edgecolor="None")
+    if AlertHighBG-ROC_lim[1]*pred_h >= BGLow:
+        ax.fill([(AlertLowBG-BGHigh)/pred_h,AlertHighROC,AlertHighROC,ROC_lim[1],ROC_lim[1],AlertLowROC,AlertLowROC,(AlertLowBG-BGHigh)/pred_h],
+                [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,AlertHighBG-ROC_lim[1]*pred_h,BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,BGHigh],
+                color="tab:green",alpha=0.2,zorder=2,edgecolor="None")
+    else:
+        ax.fill([(AlertLowBG-BGHigh)/pred_h,AlertHighROC,AlertHighROC,-(BGLow-AlertHighBG)/pred_h,AlertLowROC,AlertLowROC,(AlertLowBG-BGHigh)/pred_h],
+                [BGHigh,BGHigh,AlertHighBG-AlertHighROC*pred_h,BGLow,BGLow,AlertLowBG-AlertLowROC*pred_h,BGHigh],
+                color="tab:green",alpha=0.2,zorder=2,edgecolor="None")
+
+    # Stable
+    ax.fill([-1,1,1,-1],[70,70,180,180],color="tab:green",alpha=0.4,zorder=2,edgecolor="None")
 
     # Region labels
     alpha = 1
@@ -232,14 +264,14 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
     ax.text(ROC_lim[1]-0.2,35,"BG\nlow",va="center",ha="right",color="orangered",alpha=alpha)
     ax.text(ROC_lim[1]-0.2,180,"Alert\nhigh",va="top",ha="right",color="red",alpha=alpha)
     ax.text(ROC_lim[0]+0.2,BGLow+pady,"Alert\nlow",va="bottom",ha="left",color="red",alpha=alpha)
-    ax.text(ROC_lim[0]+0.2,BGHigh-pady,"Neutral",va="top",ha="left",color="tab:green",alpha=alpha)
+    ax.text(1.8,60,"Stable",va="top",ha="center",color="tab:green",alpha=alpha)
 
     ##################################
     # Plot data
     # Scatter plot
     tmp = df.copy()
-    tmp.loc[tmp["ROC"] > 5,"ROC"] = np.NaN
-    ax.scatter(tmp["ROC"],tmp["BG"],s=4,color="tab:blue",zorder=3,alpha=0.3,edgecolor="None")
+    tmp.loc[tmp["ROC"] > 5,"ROC"] = np.nan
+    ax.scatter(tmp["ROC"],tmp["BG"],s=4,color="tab:blue",zorder=3,alpha=0.4,edgecolor="None")
 
     # Bars on the right
     cnt = region_cnt(df.copy())
@@ -257,8 +289,8 @@ def DGR_plot(df,save_path=None,filename="DGR_plot",figsize=[13,10],ax=None,
 
     # Number of pairs
     ax.text(ROC_lim[1]+pad*2,BG_lim[1]-5,"n={:d}".format(cnt[5]),va="top",ha="left",color="k")
-    # Neutral region
-    ax.text(ROC_lim[1]+pad*2,195,"Neutral",va="center",ha="left",color="tab:green")
+    # Stable region
+    ax.text(ROC_lim[1]+pad*2,195,"Stable",va="center",ha="left",color="tab:green")
     ax.text(ROC_lim[1]+pad*2,175,"{:.1f}%".format(share[4]),va="center",ha="left",color="black")
     # MARoC
     ax.text(ROC_lim[1]+bspace,BG_lim[0]-5,"MARoC: {:.2f}".format(df["ROC"].abs().mean()),va="top",ha="right",color="k")
