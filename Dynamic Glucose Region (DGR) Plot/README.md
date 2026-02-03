@@ -1,8 +1,13 @@
-Creation of a Dynamic Glucose Region (DGR) plot as described in the following article (see pdf in the folder)
+Creation of a Dynamic Glucose Region (DGR) plot as described in the following articles
 
 Eichenlaub, M.; Pleus, S.; Rothenbühler, M.; [...] Freckmann, G.: *Comparator Data Characteristics and Testing Procedures for the Clinical Performance Evaluation of Continuous Glucose Monitoring Systems*, Diabetes Technology & Therapeutics, 2024 [Link](https://www.liebertpub.com/doi/10.1089/dia.2023.0465)
 
-Should you decide to use this software in a publication we would appreciate if the above reference would be cited.
+Pleus, S.; Eichenlaub, M.; [...] Freckmann, G.: *Clinical assessment and acceptance criteria for continuous glucose monitoring (CGM) system performance: A proposed guideline by the IFCC Working Group on CGM*, Clinica Chimica Acta, 2025 [Link](https://www.sciencedirect.com/science/article/pii/S0009898125006072)
+
+Should you decide to use this software in a publication we would appreciate if the above references would be cited.
+
+## Update 2026
+The function now inlcudes the updated definitions of the DGR are proposed by the IFCC WG-CGM guideline published in 2025
 
 ---
 
